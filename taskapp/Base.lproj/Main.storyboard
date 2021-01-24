@@ -58,13 +58,33 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="7ES-Cw-Ru1">
-                        <barButtonItem key="rightBarButtonItem" title="＋" id="yP5-Ww-aai">
-                            <connections>
-                                <segue destination="wMQ-US-K36" kind="show" id="jfR-e6-fFm"/>
-                            </connections>
-                        </barButtonItem>
+                        <nil key="title"/>
+                        <textField key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" id="xQh-6c-lm5">
+                            <rect key="frame" x="111.5" y="5" width="143" height="34"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                        <rightBarButtonItems>
+                            <barButtonItem title="＋" id="yP5-Ww-aai">
+                                <connections>
+                                    <segue destination="wMQ-US-K36" kind="show" id="jfR-e6-fFm"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem style="plain" id="612-lp-suz">
+                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="Z4p-lZ-usg">
+                                    <rect key="frame" x="260.5" y="7" width="108" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="カテゴリ別表示"/>
+                                    <connections>
+                                        <action selector="selectButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ma9-yV-w1V"/>
+                                    </connections>
+                                </button>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="selectedCategory" destination="xQh-6c-lm5" id="qTR-Mk-ZvE"/>
                         <outlet property="tableView" destination="2Ja-xq-syD" id="N92-zf-Hbc"/>
                         <segue destination="wMQ-US-K36" kind="show" identifier="cellSegue" id="LHW-MF-HSD"/>
                     </connections>

@@ -13,6 +13,10 @@ import UserNotifications
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var selectedCategory: UITextField!
+    
+    // 入力されたカテゴリ（文字列）保存用の変数
+    var textFieldString = ""
     
     // Realmインスタンスを取得する
     let realm = try! Realm()
@@ -21,34 +25,48 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // 日付の近い順でソート：昇順
     // 以降内容をアップデートするとリスト内は自動的に更新される。
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         tableView.delegate = self
         tableView.dataSource = self
+        
+        if textFieldString == "" {
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        } else {
+            let predicate = NSPredicate(format: "category = %@", "textFieldString")
+            taskArray = realm.objects(Task.self).filter(predicate)
         }
+        
+    }
 
-        // データの数（＝セルの数）を返すメソッド
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return taskArray.count
-        }
+    @IBAction func selectButton(_ sender: Any) {
+        textFieldString = selectedCategory.text!
+    }
+    
+    
+    // データの数（＝セルの数）を返すメソッド
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return taskArray.count
+    }
 
-        // 各セルの内容を返すメソッド
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            // 再利用可能な cell を得る
+    // 各セルの内容を返すメソッド
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // 再利用可能な cell を得る
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-            // Cellに値を設定する.  --- ここから ---
-            let task = taskArray[indexPath.row]
-            cell.textLabel?.text = "カテゴリ：\(task.category)" + "　,　" + "タイトル：\(task.title)"
+                // Cellに値を設定する.  --- ここから ---
+                let task = taskArray[indexPath.row]
+                cell.textLabel?.text = "カテゴリ：\(task.category)" + "　,　" + "タイトル：\(task.title)"
 
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd HH:mm"
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd HH:mm"
 
-            let dateString:String = formatter.string(from: task.date)
-            cell.detailTextLabel?.text = dateString
-            // --- ここまで追加 ---
+                let dateString:String = formatter.string(from: task.date)
+                cell.detailTextLabel?.text = dateString
+                // --- ここまで追加 ---
             
             return cell
         }
