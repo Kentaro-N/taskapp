@@ -14,6 +14,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var selectedCategory: UITextField!
+    @IBAction func pushButton(_ sender: Any) {
+        
+        textFieldString = selectedCategory.text!
+        
+        print(textFieldString)
+        
+        let predicate = NSPredicate(format: "category = %@", "(\textFieldString)")
+        taskArray = realm.objects(Task.self).filter(predicate)
+    }
     
     // 入力されたカテゴリ（文字列）保存用の変数
     var textFieldString = ""
@@ -33,18 +42,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
-        if textFieldString == "" {
-            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
-        } else {
-            let predicate = NSPredicate(format: "category = %@", "textFieldString")
-            taskArray = realm.objects(Task.self).filter(predicate)
-        }
+        taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        
         
     }
 
-    @IBAction func selectButton(_ sender: Any) {
-        textFieldString = selectedCategory.text!
-    }
+    
+   // @IBOutlet weak var selectButton: UIButton!
+    
+    //@IBAction func selectCategory(_ sender: Any) {
+    //  textFieldString = selectedCategory.text!
+
+    //}
     
     
     // データの数（＝セルの数）を返すメソッド
