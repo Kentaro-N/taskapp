@@ -13,15 +13,24 @@ import UserNotifications
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
+    
+    //カテゴリ選択する部分（「絞り込み」ボタンが押された時）の動作の記述
     @IBOutlet weak var selectedCategory: UITextField!
     @IBAction func pushButton(_ sender: Any) {
         
+        //入力されたカテゴリを格納する
         textFieldString = selectedCategory.text!
-        
-        print(textFieldString)
-        
-        let predicate = NSPredicate(format: "category = %@", "(\textFieldString)")
-        taskArray = realm.objects(Task.self).filter(predicate)
+        if textFieldString == "" {
+            
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+            tableView.reloadData()
+            
+        } else {
+            
+            let predicate = NSPredicate(format: "category = %@", textFieldString)
+            taskArray = realm.objects(Task.self).filter(predicate)
+            tableView.reloadData()
+        }
     }
     
     // 入力されたカテゴリ（文字列）保存用の変数
@@ -47,15 +56,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
     }
 
-    
-   // @IBOutlet weak var selectButton: UIButton!
-    
-    //@IBAction func selectCategory(_ sender: Any) {
-    //  textFieldString = selectedCategory.text!
-
-    //}
-    
-    
     // データの数（＝セルの数）を返すメソッド
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return taskArray.count
